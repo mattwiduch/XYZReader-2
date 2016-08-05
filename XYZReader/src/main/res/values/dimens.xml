@@ -8,4 +8,12 @@
     <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
 
+    <!-- Text Padding -->
+    <dimen name="text_spacing">4dp</dimen>
+    <dimen name="text_padding_horizontal">16dp</dimen>
+    <dimen name="text_padding_top">16dp</dimen>
+    <dimen name="text_padding_bottom">24dp</dimen>
+    <dimen name="primary_title_padding_top">24dp</dimen>
+    <dimen name="primary_title_padding_bottom">16dp</dimen>
+
 </resources>
