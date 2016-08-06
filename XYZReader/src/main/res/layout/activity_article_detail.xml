@@ -19,9 +19,9 @@
             android:id="@+id/action_up"
             android:layout_width="?android:actionBarSize"
             android:layout_height="?android:actionBarSize"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginRight="@dimen/text_padding_horizontal"
+            android:layout_marginEnd="@dimen/text_padding_horizontal"
+            android:layout_marginBottom="@dimen/text_padding_horizontal"
             android:background="@drawable/selector"
             android:contentDescription="@string/up"
             android:src="@drawable/ic_arrow_back" />
