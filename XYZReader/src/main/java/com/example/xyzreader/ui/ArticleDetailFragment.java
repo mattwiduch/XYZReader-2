@@ -5,14 +5,20 @@ import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +42,8 @@ public class ArticleDetailFragment extends Fragment implements
     private long mItemId;
     private View mRootView;
     private ImageView mPhotoView;
+
+    private int mStatusBarColor;
 
     public ArticleDetailFragment() {
         /**
@@ -74,7 +82,7 @@ public class ArticleDetailFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
 
@@ -87,6 +95,7 @@ public class ArticleDetailFragment extends Fragment implements
 //                        .getIntent(), getString(R.string.action_share)));
 //            }
 //        });
+
 
         bindViews();
         return mRootView;
@@ -116,6 +125,7 @@ public class ArticleDetailFragment extends Fragment implements
                             + mCursor.getString(ArticleLoader.Query.AUTHOR)
                             + "</b>"));
             bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY)));
+
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
@@ -123,6 +133,17 @@ public class ArticleDetailFragment extends Fragment implements
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
                                 mPhotoView.setImageBitmap(bitmap);
+                                final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                                        36, getActivity().getResources().getDisplayMetrics());
+                                Palette p = Palette.from(bitmap)
+                                        .maximumColorCount(5)
+                                        //.clearFilters()
+                                        .setRegion(0, 0, bitmap.getWidth() - 1, twentyFourDip)
+                                        .generate();
+                                mStatusBarColor = p.getDarkVibrantColor(p.getDarkMutedColor(p.getVibrantColor(p.getMutedColor(p.getLightVibrantColor(p.getLightMutedColor(Color.BLACK))))));
+                                if (getUserVisibleHint()) {
+                                    updateStatusBarColor();
+                                }
                             }
                         }
 
@@ -134,8 +155,17 @@ public class ArticleDetailFragment extends Fragment implements
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
-            bylineView.setText("N/A" );
+            bylineView.setText("N/A");
             bodyView.setText("N/A");
+        }
+    }
+
+    /** Changes status bar color **/
+    private void updateStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(mStatusBarColor);
         }
     }
 
@@ -167,5 +197,13 @@ public class ArticleDetailFragment extends Fragment implements
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mCursor = null;
         bindViews();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisible() && isResumed()) {
+            updateStatusBarColor();
+        }
     }
 }
