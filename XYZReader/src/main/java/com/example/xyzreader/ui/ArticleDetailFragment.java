@@ -1,6 +1,7 @@
 package com.example.xyzreader.ui;
 
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Loader;
@@ -9,8 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -170,22 +168,24 @@ public class ArticleDetailFragment extends Fragment implements
      * Credit to Nick Butcher, creator of Plaid.
      * https://github.com/nickbutcher/plaid
      **/
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void updateStatusBarColor() {
-        final Window window = getActivity().getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            final Window window = getActivity().getWindow();
 
-        if (mStatusBarColor != window.getStatusBarColor()) {
-            ValueAnimator statusBarColorAnim = ValueAnimator.ofArgb(
-                    window.getStatusBarColor(), mStatusBarColor);
-            statusBarColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    window.setStatusBarColor((int) animation.getAnimatedValue());
-                }
-            });
-            statusBarColorAnim.setDuration(600L);
-            statusBarColorAnim.setInterpolator(new AccelerateDecelerateInterpolator());
-            statusBarColorAnim.start();
+            if (mStatusBarColor != window.getStatusBarColor()) {
+                ValueAnimator statusBarColorAnim = ValueAnimator.ofArgb(
+                        window.getStatusBarColor(), mStatusBarColor);
+                statusBarColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        window.setStatusBarColor((int) animation.getAnimatedValue());
+                    }
+                });
+                statusBarColorAnim.setDuration(600L);
+                statusBarColorAnim.setInterpolator(new AccelerateDecelerateInterpolator());
+                statusBarColorAnim.start();
+            }
         }
     }
 
