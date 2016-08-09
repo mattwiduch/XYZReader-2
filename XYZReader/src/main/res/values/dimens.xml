@@ -16,5 +16,6 @@
     <dimen name="text_padding_bottom">24dp</dimen>
     <dimen name="primary_title_padding_top">24dp</dimen>
     <dimen name="primary_title_padding_bottom">16dp</dimen>
+    <dimen name="toolbar_title_padding_start">72dp</dimen>
 
 </resources>
