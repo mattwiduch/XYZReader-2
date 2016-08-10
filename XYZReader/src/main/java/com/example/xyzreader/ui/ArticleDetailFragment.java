@@ -179,7 +179,7 @@ public class ArticleDetailFragment extends Fragment implements
                                         .generate();
                                 mStatusBarColor = p.getDarkVibrantColor(p.getDarkMutedColor(p.getVibrantColor(p.getMutedColor(p.getLightVibrantColor(p.getLightMutedColor(Color.BLACK))))));
                                 if (getUserVisibleHint()) {
-                                    updateStatusBarColor();
+                                    applyColors();
                                 }
                             }
                         }
@@ -198,13 +198,16 @@ public class ArticleDetailFragment extends Fragment implements
     }
 
     /**
-     * Status bar color change animation.
-     *
-     * Credit to Nick Butcher, creator of Plaid.
-     * https://github.com/nickbutcher/plaid
+     * Applies colours derived from article photo to UI elements.
      **/
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void updateStatusBarColor() {
+    private void applyColors() {
+        // Collapsed toolbar colour
+        mToolbarLayout.setContentScrimColor(mStatusBarColor);
+
+        //Status bar colour change animation
+        //Credit to Nick Butcher, creator of Plaid
+        //https://github.com/nickbutcher/plaid
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             final Window window = getActivity().getWindow();
 
@@ -258,7 +261,7 @@ public class ArticleDetailFragment extends Fragment implements
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisible() && isResumed()) {
-            updateStatusBarColor();
+            applyColors();
         }
     }
 }
