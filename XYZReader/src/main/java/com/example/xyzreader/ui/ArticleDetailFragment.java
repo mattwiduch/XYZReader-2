@@ -51,7 +51,7 @@ public class ArticleDetailFragment extends Fragment implements
     private ImageView mPhotoView;
     private CollapsingToolbarLayout mToolbarLayout;
 
-    private int mStatusBarColor;
+    private int mColor;
 
     public ArticleDetailFragment() {
         /**
@@ -177,7 +177,7 @@ public class ArticleDetailFragment extends Fragment implements
                                         //.clearFilters()
                                         .setRegion(0, 0, bitmap.getWidth() - 1, twentyFourDip)
                                         .generate();
-                                mStatusBarColor = p.getDarkVibrantColor(p.getDarkMutedColor(p.getVibrantColor(p.getMutedColor(p.getLightVibrantColor(p.getLightMutedColor(Color.BLACK))))));
+                                mColor = p.getDarkVibrantColor(p.getDarkMutedColor(p.getVibrantColor(p.getMutedColor(p.getLightVibrantColor(p.getLightMutedColor(Color.BLACK))))));
                                 if (getUserVisibleHint()) {
                                     applyColors();
                                 }
@@ -203,7 +203,7 @@ public class ArticleDetailFragment extends Fragment implements
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void applyColors() {
         // Collapsed toolbar colour
-        mToolbarLayout.setContentScrimColor(mStatusBarColor);
+        mToolbarLayout.setContentScrimColor(lightenColor(mColor));
 
         //Status bar colour change animation
         //Credit to Nick Butcher, creator of Plaid
@@ -211,9 +211,9 @@ public class ArticleDetailFragment extends Fragment implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             final Window window = getActivity().getWindow();
 
-            if (mStatusBarColor != window.getStatusBarColor()) {
+            if (mColor != window.getStatusBarColor()) {
                 ValueAnimator statusBarColorAnim = ValueAnimator.ofArgb(
-                        window.getStatusBarColor(), mStatusBarColor);
+                        window.getStatusBarColor(), mColor);
                 statusBarColorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -225,6 +225,20 @@ public class ArticleDetailFragment extends Fragment implements
                 statusBarColorAnim.start();
             }
         }
+    }
+
+    /**
+     * Creates lighter shade of a given colour.
+     *
+     * @param color int value of base colour
+     * @return new colour value
+     */
+    private int lightenColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[1] = hsv[1] - 0.1f;
+        hsv[2] = hsv[2] + 0.05f;
+        return Color.HSVToColor(hsv);
     }
 
     @Override
