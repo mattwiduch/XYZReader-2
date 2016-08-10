@@ -155,7 +155,7 @@ public class ArticleDetailFragment extends Fragment implements
                     }
 
                     // Show/Hide fab
-                    if (verticalOffset < -2 * (mToolbarLayout.getHeight() - mPhotoView.getHeight())) {
+                    if (verticalOffset < -1.95 * (mToolbarLayout.getHeight() - mPhotoView.getHeight())) {
                         ((FloatingActionButton)mRootView.findViewById(R.id.share_fab)).hide();
                     } else {
                         ((FloatingActionButton)mRootView.findViewById(R.id.share_fab)).show();
