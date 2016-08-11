@@ -3,7 +3,7 @@
     <dimen name="content_padding">16dp</dimen>
 
     <!-- Toolbar Properties -->
-    <dimen name="toolbar_title_keyline">72dp</dimen>
+    <dimen name="toolbar_title_keyline">70dp</dimen>
 
     <!-- FAB Properties -->
     <dimen name="fab_elevation">6dp</dimen>
