@@ -1,21 +1,23 @@
 <resources>
-    <!-- detail -->
-    <dimen name="detail_title_text_size">32sp</dimen>
-    <dimen name="detail_body_text_size">22sp</dimen>
-    <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
+    <!-- General Properties -->
+    <dimen name="content_padding">16dp</dimen>
 
-    <!-- FAB properties -->
+    <!-- Toolbar Properties -->
+    <dimen name="toolbar_title_keyline">72dp</dimen>
+
+    <!-- FAB Properties -->
     <dimen name="fab_elevation">6dp</dimen>
     <dimen name="fab_press_translation_z">12dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <!-- Text Padding -->
-    <dimen name="text_spacing">4dp</dimen>
+    <!-- Body Text Properties -->
     <dimen name="text_padding_horizontal">16dp</dimen>
     <dimen name="text_padding_top">16dp</dimen>
     <dimen name="text_padding_bottom">24dp</dimen>
+
+    <!-- Title Text Properties -->
     <dimen name="primary_title_padding_top">24dp</dimen>
     <dimen name="primary_title_padding_bottom">16dp</dimen>
-    <dimen name="toolbar_title_padding_start">72dp</dimen>
+    <dimen name="primary_title_byline_spacing">4dp</dimen>
 
 </resources>
