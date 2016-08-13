@@ -20,14 +20,17 @@ import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -93,6 +96,27 @@ public class ArticleDetailFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
+
+        // If device is in landscape mode, calculate correct padding and scroll to 1/3 of the view
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            final ScrollView scrollView = (ScrollView) mRootView.findViewById(R.id.scroll_view);
+            scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    int height = scrollView.getHeight();
+                    if (height > 0) {
+                        int bottomPadding = Math.round(24 *
+                                (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
+                        int topPadding = scrollView.getHeight() - bottomPadding;
+                        scrollView.setPadding(0, topPadding, 0, bottomPadding);
+                        scrollView.smoothScrollTo(0, topPadding / 3);
+                        // remove listener so it's called only once
+                        scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                }
+            });
+        }
+
         mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
 
         mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
@@ -174,7 +198,7 @@ public class ArticleDetailFragment extends Fragment implements
                             if (bitmap != null) {
                                 mPhotoView.setImageBitmap(bitmap);
                                 final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                                        36, getActivity().getResources().getDisplayMetrics());
+                                        36, getResources().getDisplayMetrics());
                                 Palette p = Palette.from(bitmap)
                                         .maximumColorCount(5)
                                         //.clearFilters()
