@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -154,11 +155,13 @@ public class ArticleDetailFragment extends Fragment implements
                         showTitle = false;
                     }
 
-                    // Show/Hide fab
-                    if (verticalOffset < -1.95 * (mToolbarLayout.getHeight() - mPhotoView.getHeight())) {
-                        ((FloatingActionButton)mRootView.findViewById(R.id.share_fab)).hide();
-                    } else {
-                        ((FloatingActionButton)mRootView.findViewById(R.id.share_fab)).show();
+                    // Show/Hide fab (only in portrait)
+                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        if (verticalOffset < -1.95 * (mToolbarLayout.getHeight() - mPhotoView.getHeight())) {
+                            ((FloatingActionButton) mRootView.findViewById(R.id.share_fab)).hide();
+                        } else {
+                            ((FloatingActionButton) mRootView.findViewById(R.id.share_fab)).show();
+                        }
                     }
                 }
             });
