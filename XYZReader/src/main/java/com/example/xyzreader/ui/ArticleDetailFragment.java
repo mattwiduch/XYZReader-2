@@ -16,6 +16,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -30,7 +31,6 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -99,7 +99,7 @@ public class ArticleDetailFragment extends Fragment implements
 
         // If device is in landscape mode, calculate correct padding and scroll to 1/3 of the view
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            final ScrollView scrollView = (ScrollView) mRootView.findViewById(R.id.scroll_view);
+            final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
             scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
