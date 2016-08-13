@@ -8,16 +8,16 @@ import android.widget.ImageView;
  * Square ImageView.
  */
 
-public class ArticleImageView extends ImageView {
-    public ArticleImageView(Context context) {
+public class SquareImageView extends ImageView {
+    public SquareImageView(Context context) {
         super(context);
     }
 
-    public ArticleImageView(Context context, AttributeSet attrs) {
+    public SquareImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ArticleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SquareImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
