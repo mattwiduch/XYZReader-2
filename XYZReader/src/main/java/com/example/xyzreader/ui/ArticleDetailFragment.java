@@ -34,6 +34,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -273,7 +274,7 @@ public class ArticleDetailFragment extends Fragment implements
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
                                 mPhotoView.setImageBitmap(bitmap);
-                                // TODO: Fix crash
+                                // TODO: Fix crash (Move code somewhere else. Perhaps to parent method)
                                 final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                                         36, getResources().getDisplayMetrics());
                                 Palette p = Palette.from(bitmap)
@@ -290,7 +291,9 @@ public class ArticleDetailFragment extends Fragment implements
 
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-
+                            if (isVisible()) {
+                                Toast.makeText(getActivity(), R.string.error_loading_image, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
         } else {
