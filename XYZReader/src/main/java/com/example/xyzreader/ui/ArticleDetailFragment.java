@@ -9,6 +9,8 @@ import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
 import android.text.Html;
@@ -291,8 +294,27 @@ public class ArticleDetailFragment extends Fragment implements
 
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            if (isVisible()) {
-                                Toast.makeText(getActivity(), R.string.error_loading_image, Toast.LENGTH_SHORT).show();
+                            if (getUserVisibleHint()) {
+                                Bitmap logo = BitmapFactory.decodeResource(getActivity().getResources(),
+                                        R.drawable.empty_detail);
+                                mColor = ContextCompat.getColor(getActivity(),
+                                        android.R.color.darker_gray);
+
+                                // Combine logo and background color in new bitmap
+                                // and show it as article picture
+                                Bitmap errorImage = Bitmap.createBitmap(logo.getWidth(),
+                                        logo.getHeight(), logo.getConfig());
+                                Canvas canvas = new Canvas(errorImage);
+                                canvas.drawColor(mColor);
+                                canvas.drawBitmap(logo, 0, 0, null);
+                                mPhotoView.setImageBitmap(errorImage);
+
+                                // Show Toast with error message
+                                Toast.makeText(getActivity(), R.string.error_loading_image,
+                                        Toast.LENGTH_SHORT).show();
+                                if (getUserVisibleHint()) {
+                                    applyColors();
+                                }
                             }
                         }
                     });
