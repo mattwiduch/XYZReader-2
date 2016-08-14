@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -30,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -96,10 +98,12 @@ public class ArticleDetailFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
+        mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
 
-        // If device is in landscape mode, calculate correct padding and scroll to 1/3 of the view
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        // Restore state for landscape mode
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
+            final Bundle state = savedInstanceState;
             scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -109,7 +113,15 @@ public class ArticleDetailFragment extends Fragment implements
                                 (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
                         int topPadding = scrollView.getHeight() - bottomPadding;
                         scrollView.setPadding(0, topPadding, 0, bottomPadding);
-                        scrollView.smoothScrollTo(0, topPadding / 3);
+                        // If there's no saved state
+                        if (state == null) {
+                            // calculate correct padding and scroll to 1/3 of the view
+                            scrollView.smoothScrollTo(0, topPadding / 3);
+                        } else {
+                            NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
+                            int toScroll = state.getInt(getString(R.string.key_article_state)) > topPadding / 3 ? state.getInt(getString(R.string.key_article_state)) : topPadding / 3;
+                            scrollView.smoothScrollTo(0, toScroll);
+                        }
                         // remove listener so it's called only once
                         scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
@@ -117,8 +129,53 @@ public class ArticleDetailFragment extends Fragment implements
             });
         }
 
-        mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
+        // Restore state for portrait mode
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
+            final Bundle state = savedInstanceState;
+            scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (state != null) {
+                        int scrollPosition = state.getInt("scrollPosition");
+                        final AppBarLayout appBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar_layout);
 
+                        if (scrollPosition > 0) {
+                            // Calculate toolbar collapse offset
+                            int toCollapse = scrollPosition > appBarLayout.getBottom() ? appBarLayout.getBottom() : scrollPosition;
+                            // Calculate new scroll position
+                            int toScroll = scrollPosition - appBarLayout.getBottom() > 0 ? scrollPosition - appBarLayout.getBottom() : 0;
+
+                            // Collapse toolbar by calculated offset before scrolling
+                            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+                            final AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+                            if (behavior != null) {
+                                ValueAnimator valueAnimator = ValueAnimator.ofInt();
+                                valueAnimator.setInterpolator(new DecelerateInterpolator());
+                                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                    @Override
+                                    public void onAnimationUpdate(ValueAnimator animation) {
+                                        behavior.setTopAndBottomOffset((Integer) animation.getAnimatedValue());
+                                        appBarLayout.requestLayout();
+                                    }
+                                });
+
+                                valueAnimator.setIntValues(0, -toCollapse);
+                                valueAnimator.setDuration(400);
+                                valueAnimator.start();
+                            }
+                            scrollView.smoothScrollTo(0, toScroll);
+                        } else {
+                            scrollView.smoothScrollTo(0, 0);
+                        }
+                    }
+                    // remove listener so it's called only once
+                    scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
+        }
+
+        // Add OnClickListener to FAB
         mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,6 +189,25 @@ public class ArticleDetailFragment extends Fragment implements
 
         bindViews();
         return mRootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        int scrollPosition = mRootView.findViewById(R.id.scroll_view).getScrollY();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Calculate correct scroll position in portrait mode by including offset of collapsed
+            // toolbar
+            AppBarLayout appBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar_layout);
+            scrollPosition += appBarLayout.getHeight() - appBarLayout.getBottom();
+        } else {
+            NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
+            // Do not scroll if scroll view was at or below default position in landscape mode
+            if (scrollPosition <= (scrollView.getPaddingTop() / 3)) {
+                scrollPosition = 0;
+            }
+        }
+        outState.putInt(getString(R.string.key_article_state), scrollPosition);
     }
 
     private void bindViews() {
@@ -174,13 +250,13 @@ public class ArticleDetailFragment extends Fragment implements
                     if (scrollRange + verticalOffset == 0) {
                         mToolbarLayout.setTitle(titleView.getText());
                         showTitle = true;
-                    } else if(showTitle) {
+                    } else if (showTitle) {
                         mToolbarLayout.setTitle(" ");
                         showTitle = false;
                     }
 
                     // Show/Hide fab (only in portrait)
-                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                         if (verticalOffset < -1.95 * (mToolbarLayout.getHeight() - mPhotoView.getHeight())) {
                             ((FloatingActionButton) mRootView.findViewById(R.id.share_fab)).hide();
                         } else {
@@ -197,6 +273,7 @@ public class ArticleDetailFragment extends Fragment implements
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
                                 mPhotoView.setImageBitmap(bitmap);
+                                // TODO: Fix crash
                                 final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                                         36, getResources().getDisplayMetrics());
                                 Palette p = Palette.from(bitmap)

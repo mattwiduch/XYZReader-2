@@ -9,5 +9,6 @@
 
     <string name="up">Up</string>
     <string name="share_sample_text">Some sample text</string>
+    <string name="key_article_state">scrollPosition</string>
 
 </resources>
