@@ -207,7 +207,9 @@ public class ArticleDetailFragment extends Fragment implements
         outState.putInt(getString(R.string.key_article_state), scrollPosition);
     }
 
-    // TODO: Refactor
+    /**
+     * Binds data to the views.
+     */
     private void bindViews() {
         if (mRootView == null) {
             return;
@@ -271,15 +273,21 @@ public class ArticleDetailFragment extends Fragment implements
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
                                 mPhotoView.setImageBitmap(bitmap);
-                                // TODO: Fix crash (Move code somewhere else. Perhaps to parent method)
-                                final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                                        36, getResources().getDisplayMetrics());
+
+                                final int imageSampleHeight = (int) TypedValue.applyDimension(
+                                        TypedValue.COMPLEX_UNIT_DIP,
+                                        36,
+                                        getActivity().getResources().getDisplayMetrics());
+
                                 Palette p = Palette.from(bitmap)
                                         .maximumColorCount(5)
-                                        //.clearFilters()
-                                        .setRegion(0, 0, bitmap.getWidth() - 1, twentyFourDip)
+                                        .setRegion(0, 0, bitmap.getWidth() - 1, imageSampleHeight)
                                         .generate();
-                                mColor = p.getDarkVibrantColor(p.getDarkMutedColor(p.getVibrantColor(p.getMutedColor(p.getLightVibrantColor(p.getLightMutedColor(Color.BLACK))))));
+
+                                mColor = p.getDarkVibrantColor(p.getDarkMutedColor(p.getVibrantColor(
+                                        p.getMutedColor(p.getLightVibrantColor(p.getLightMutedColor(
+                                                Color.BLACK))))));
+
                                 if (getUserVisibleHint()) {
                                     applyColors();
                                 }
