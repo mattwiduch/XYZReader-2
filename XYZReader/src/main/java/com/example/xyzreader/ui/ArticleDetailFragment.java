@@ -104,14 +104,13 @@ public class ArticleDetailFragment extends Fragment implements
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
 
-        // TODO: Refactor
-        // Restore state for landscape mode
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
-            final Bundle state = savedInstanceState;
-            scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
+        final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
+        final Bundle state = savedInstanceState;
+        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Landscape mode scroll adjustment
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     int height = scrollView.getHeight();
                     if (height > 0) {
                         int bottomPadding = Math.round(24 *
@@ -123,63 +122,56 @@ public class ArticleDetailFragment extends Fragment implements
                             // calculate correct padding and scroll to 1/3 of the view
                             scrollView.smoothScrollTo(0, topPadding / 3);
                         } else {
-                            NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
-                            int toScroll = state.getInt(getString(R.string.key_article_state)) > topPadding / 3 ? state.getInt(getString(R.string.key_article_state)) : topPadding / 3;
+                            int toScroll = state.getInt(getString(R.string.key_article_state)) > topPadding / 3
+                                    ? state.getInt(getString(R.string.key_article_state)) : topPadding / 3;
                             scrollView.smoothScrollTo(0, toScroll);
                         }
                         // remove listener so it's called only once
                         scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
-                }
-            });
-        }
+                // Portrait mode scroll adjustment
+                } else if (getResources().getConfiguration().orientation ==
+                        Configuration.ORIENTATION_PORTRAIT && state != null) {
+                    int scrollPosition = state.getInt(getString(R.string.key_article_state));
+                    final AppBarLayout appBarLayout =
+                            (AppBarLayout) mRootView.findViewById(R.id.app_bar_layout);
 
-        // TODO: Refactor
-        // Restore state for portrait mode
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
-            final Bundle state = savedInstanceState;
-            scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    if (state != null) {
-                        int scrollPosition = state.getInt("scrollPosition");
-                        final AppBarLayout appBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar_layout);
+                    if (scrollPosition > 0) {
+                        // Calculate toolbar collapse offset
+                        int toCollapse = scrollPosition > appBarLayout.getBottom()
+                                ? appBarLayout.getBottom() : scrollPosition;
+                        // Calculate new scroll position
+                        int toScroll = scrollPosition - appBarLayout.getBottom() > 0
+                                ? scrollPosition - appBarLayout.getBottom() : 0;
 
-                        if (scrollPosition > 0) {
-                            // Calculate toolbar collapse offset
-                            int toCollapse = scrollPosition > appBarLayout.getBottom() ? appBarLayout.getBottom() : scrollPosition;
-                            // Calculate new scroll position
-                            int toScroll = scrollPosition - appBarLayout.getBottom() > 0 ? scrollPosition - appBarLayout.getBottom() : 0;
+                        // Collapse toolbar by calculated offset before scrolling
+                        CoordinatorLayout.LayoutParams params =
+                                (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+                        final AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+                        if (behavior != null) {
+                            ValueAnimator valueAnimator = ValueAnimator.ofInt();
+                            valueAnimator.setInterpolator(new DecelerateInterpolator());
+                            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    behavior.setTopAndBottomOffset((Integer) animation.getAnimatedValue());
+                                    appBarLayout.requestLayout();
+                                }
+                            });
 
-                            // Collapse toolbar by calculated offset before scrolling
-                            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-                            final AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
-                            if (behavior != null) {
-                                ValueAnimator valueAnimator = ValueAnimator.ofInt();
-                                valueAnimator.setInterpolator(new DecelerateInterpolator());
-                                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                    @Override
-                                    public void onAnimationUpdate(ValueAnimator animation) {
-                                        behavior.setTopAndBottomOffset((Integer) animation.getAnimatedValue());
-                                        appBarLayout.requestLayout();
-                                    }
-                                });
-
-                                valueAnimator.setIntValues(0, -toCollapse);
-                                valueAnimator.setDuration(400);
-                                valueAnimator.start();
-                            }
-                            scrollView.smoothScrollTo(0, toScroll);
-                        } else {
-                            scrollView.smoothScrollTo(0, 0);
+                            valueAnimator.setIntValues(0, -toCollapse);
+                            valueAnimator.setDuration(400);
+                            valueAnimator.start();
                         }
+                        scrollView.smoothScrollTo(0, toScroll);
+                    } else {
+                        scrollView.smoothScrollTo(0, 0);
                     }
                     // remove listener so it's called only once
                     scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
-            });
-        }
+            }
+        });
 
         // Add OnClickListener to FAB
         mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
@@ -191,7 +183,6 @@ public class ArticleDetailFragment extends Fragment implements
                         .getIntent(), getString(R.string.action_share)));
             }
         });
-
 
         bindViews();
         return mRootView;
