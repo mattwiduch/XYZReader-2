@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/article_photo"
@@ -10,31 +10,28 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:orientation="horizontal">
+        android:clipToPadding="false">
 
-        <View
-            android:layout_width="0dp"
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"/>
+            android:orientation="horizontal">
 
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/scroll_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:clipToPadding="false"
-            android:paddingTop="24dp"
-            android:paddingBottom="24dp">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/article_card"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="4"
                 app:cardElevation="@dimen/cardview_default_elevation">
 
                 <LinearLayout
@@ -47,17 +44,14 @@
                     <include layout="@layout/article_body"/>
 
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
 
-        </android.support.v4.widget.NestedScrollView>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"/>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"/>
-
-    </android.support.v7.widget.LinearLayoutCompat>
-
+        </android.support.v7.widget.LinearLayoutCompat>
+    </android.support.v4.widget.NestedScrollView>
 </FrameLayout>
