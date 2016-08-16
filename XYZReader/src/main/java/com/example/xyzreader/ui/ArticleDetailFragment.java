@@ -104,6 +104,7 @@ public class ArticleDetailFragment extends Fragment implements
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
 
+        // TODO: Refactor
         // Restore state for landscape mode
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
@@ -133,6 +134,7 @@ public class ArticleDetailFragment extends Fragment implements
             });
         }
 
+        // TODO: Refactor
         // Restore state for portrait mode
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
@@ -214,6 +216,7 @@ public class ArticleDetailFragment extends Fragment implements
         outState.putInt(getString(R.string.key_article_state), scrollPosition);
     }
 
+    // TODO: Refactor
     private void bindViews() {
         if (mRootView == null) {
             return;

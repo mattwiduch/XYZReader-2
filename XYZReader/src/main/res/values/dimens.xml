@@ -21,4 +21,8 @@
     <dimen name="primary_title_padding_bottom">16dp</dimen>
     <dimen name="primary_title_byline_spacing">4dp</dimen>
 
+    <!-- Article List Properties -->
+    <dimen name="list_side_margin">8dp</dimen>
+    <dimen name="list_toolbar_side_margin">0dp</dimen>
+
 </resources>
