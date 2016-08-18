@@ -1,5 +1,7 @@
 <resources>
     <!-- General Properties -->
+    <item name="match_parent" format="integer" type="dimen">-1</item>
+    <item name="wrap_content" format="integer" type="dimen">-2</item>
     <dimen name="content_padding">16dp</dimen>
 
     <!-- Toolbar Properties -->
