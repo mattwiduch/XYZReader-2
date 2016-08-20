@@ -103,6 +103,8 @@ public class ArticleDetailFragment extends Fragment implements
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
+        mRootView.findViewById(R.id.app_bar_layout).setBackgroundColor(
+                ContextCompat.getColor(getActivity(), android.R.color.transparent));
         mColor = ContextCompat.getColor(getActivity(), R.color.theme_primary_dark);
 
         final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
