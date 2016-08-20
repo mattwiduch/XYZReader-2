@@ -10,7 +10,8 @@
         android:id="@+id/article_photo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@color/theme_primary"/>
 
     <include layout="@layout/article_title"/>
 

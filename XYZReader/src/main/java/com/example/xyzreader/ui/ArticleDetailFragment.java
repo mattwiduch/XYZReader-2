@@ -103,6 +103,7 @@ public class ArticleDetailFragment extends Fragment implements
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
+        mColor = ContextCompat.getColor(getActivity(), R.color.theme_primary_dark);
 
         final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
         final Bundle state = savedInstanceState;
@@ -298,29 +299,28 @@ public class ArticleDetailFragment extends Fragment implements
 
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            if (getUserVisibleHint()) {
                                 Bitmap logo = BitmapFactory.decodeResource(getActivity().getResources(),
                                         R.drawable.empty_detail);
                                 mColor = ContextCompat.getColor(getActivity(),
-                                        android.R.color.darker_gray);
+                                        R.color.theme_primary_dark);
 
                                 // Combine logo and background color in new bitmap
                                 // and show it as article picture
                                 Bitmap errorImage = Bitmap.createBitmap(logo.getWidth(),
                                         logo.getHeight(), logo.getConfig());
                                 Canvas canvas = new Canvas(errorImage);
-                                canvas.drawColor(mColor);
+                                canvas.drawColor(ContextCompat.getColor(getActivity(),
+                                        R.color.theme_primary));
                                 canvas.drawBitmap(logo, 0, 0, null);
                                 mPhotoView.setImageBitmap(errorImage);
 
-                                // Show Toast with error message
-                                Toast.makeText(getActivity(), R.string.error_loading_image,
-                                        Toast.LENGTH_SHORT).show();
                                 if (getUserVisibleHint()) {
                                     applyColors();
+                                    // Show Toast with error message
+                                    Toast.makeText(getActivity(), R.string.error_loading_image,
+                                            Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        }
                     });
         } else {
             mRootView.setVisibility(View.GONE);
