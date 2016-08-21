@@ -18,6 +18,11 @@
             android:layout_height="wrap_content"
             android:background="@color/theme_accent"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/scrim"/>
+
         <TextView
             android:id="@+id/article_title"
             style="@style/TextAppearance.Title"
