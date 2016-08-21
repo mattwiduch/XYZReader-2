@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:background="@color/theme_primary"/>
+        android:background="@color/theme_background"/>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"

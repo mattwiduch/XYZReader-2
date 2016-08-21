@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
-        android:src="@color/theme_primary"/>
+        android:background="@color/theme_background"
+        android:src="@drawable/empty_detail"/>
 
     <include layout="@layout/article_title"/>
 

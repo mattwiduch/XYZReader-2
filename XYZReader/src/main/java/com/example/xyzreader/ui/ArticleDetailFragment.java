@@ -304,7 +304,7 @@ public class ArticleDetailFragment extends Fragment implements
                                 Bitmap logo = BitmapFactory.decodeResource(getActivity().getResources(),
                                         R.drawable.empty_detail);
                                 mColor = ContextCompat.getColor(getActivity(),
-                                        R.color.theme_primary_dark);
+                                        R.color.theme_background_dark);
 
                                 // Combine logo and background color in new bitmap
                                 // and show it as article picture
@@ -312,7 +312,7 @@ public class ArticleDetailFragment extends Fragment implements
                                         logo.getHeight(), logo.getConfig());
                                 Canvas canvas = new Canvas(errorImage);
                                 canvas.drawColor(ContextCompat.getColor(getActivity(),
-                                        R.color.theme_primary));
+                                        R.color.theme_background));
                                 canvas.drawBitmap(logo, 0, 0, null);
                                 mPhotoView.setImageBitmap(errorImage);
 

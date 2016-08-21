@@ -17,9 +17,17 @@
 
 <resources>
 
-    <style name="Theme.XYZ" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.XYZ" parent="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+    <style name="Theme.XYZ.List" parent="@style/Theme.XYZ">
         <item name="colorPrimary">@color/theme_primary</item>
         <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="colorAccent">@color/theme_accent</item>
+    </style>
+
+    <style name="Theme.XYZ.Detail" parent="@style/Theme.XYZ">
+        <item name="colorPrimary">@color/theme_background</item>
+        <item name="colorPrimaryDark">@color/theme_background_dark</item>
         <item name="colorAccent">@color/theme_accent</item>
     </style>
 
