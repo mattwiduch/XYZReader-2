@@ -136,7 +136,7 @@ public class ArticleListActivity extends AppCompatActivity implements
             holder.thumbnailView.setDefaultImageResId(R.drawable.empty_detail);
             holder.thumbnailView.setErrorImageResId(R.drawable.empty_detail);
             holder.thumbnailView.setImageUrl(
-                    mCursor.getString(ArticleLoader.Query.THUMB_URL),
+                    mCursor.getString(ArticleLoader.Query.PHOTO_URL),
                     ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
             holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
             holder.shareButton.setOnClickListener(new View.OnClickListener() {
