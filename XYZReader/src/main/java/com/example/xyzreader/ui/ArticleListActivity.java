@@ -8,12 +8,14 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.xyzreader.R;
@@ -137,6 +139,15 @@ public class ArticleListActivity extends AppCompatActivity implements
                     mCursor.getString(ArticleLoader.Query.THUMB_URL),
                     ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
             holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+            holder.shareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(ArticleListActivity.this)
+                            .setType("text/plain")
+                            .setText(getString(R.string.share_sample_text))
+                            .getIntent(), getString(R.string.action_share)));
+                }
+            });
         }
 
         @Override
@@ -148,11 +159,13 @@ public class ArticleListActivity extends AppCompatActivity implements
     public static class ViewHolder extends RecyclerView.ViewHolder {
         DynamicHeightNetworkImageView thumbnailView;
         TextView titleView;
+        ImageView shareButton;
 
         ViewHolder(View view) {
             super(view);
             thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
             titleView = (TextView) view.findViewById(R.id.article_title);
+            shareButton = (ImageView) view.findViewById(R.id.article_share);
         }
     }
 }
