@@ -1,9 +1,17 @@
 <resources>
-    <!-- detail -->
-    <dimen name="detail_title_text_size">42sp</dimen>
-    <dimen name="detail_body_text_size">20sp</dimen>
-    <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.3</item>
+    <!-- General Properties -->
+    <dimen name="content_padding">24dp</dimen>
+
+    <!-- Toolbar Properties -->
+    <dimen name="toolbar_height">142dp</dimen>
+    <dimen name="toolbar_logo_padding">0dp</dimen>
+
+    <!-- FAB Properties -->
     <dimen name="fab_margin">24dp</dimen>
     <dimen name="fab_margin_bottom">0dp</dimen>
-    <dimen name="list_padding_edge">16dp</dimen>
+
+    <!-- Body Text Properties -->
+    <dimen name="text_padding_horizontal">32dp</dimen>
+    <dimen name="card_title_padding_horizontal">24dp</dimen>
+
 </resources>

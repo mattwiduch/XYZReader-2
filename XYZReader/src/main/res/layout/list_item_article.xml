@@ -28,8 +28,8 @@
         android:ellipsize="end"
         android:maxLines="4"
         android:paddingBottom="@dimen/primary_title_padding_bottom"
-        android:paddingLeft="@dimen/text_padding_horizontal"
-        android:paddingRight="@dimen/text_padding_horizontal"
+        android:paddingLeft="@dimen/card_title_padding_horizontal"
+        android:paddingRight="@dimen/card_title_padding_horizontal"
         android:paddingTop="@dimen/primary_title_padding_top"
         android:textColor="@color/text_primary_light"/>
 

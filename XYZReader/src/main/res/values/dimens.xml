@@ -6,7 +6,8 @@
 
     <!-- Toolbar Properties -->
     <dimen name="toolbar_title_keyline">70dp</dimen>
-    <dimen name="toolbar_height">128dp</dimen>
+    <dimen name="toolbar_height">80dp</dimen>
+    <dimen name="toolbar_logo_padding">8dp</dimen>
 
     <!-- FAB Properties -->
     <dimen name="fab_elevation">6dp</dimen>
@@ -23,6 +24,7 @@
     <dimen name="primary_title_padding_top">24dp</dimen>
     <dimen name="primary_title_padding_bottom">16dp</dimen>
     <dimen name="primary_title_byline_spacing">4dp</dimen>
+    <dimen name="card_title_padding_horizontal">16dp</dimen>
 
     <!-- Article List Properties -->
     <dimen name="list_card_spacing">4dp</dimen>
