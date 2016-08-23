@@ -50,8 +50,8 @@ public class ArticleDetailActivity extends AppCompatActivity
         // If activity is displayed in a dialog, adjust its width & height
         if (getWindow().isFloating()) {
             DisplayMetrics metrics = getResources().getDisplayMetrics();
-            int screenWidth = (int) (metrics.widthPixels * 0.87);
-            int screenHeight = (int) (metrics.heightPixels * 0.87);
+            int screenWidth = (int) (metrics.widthPixels * 0.8);
+            int screenHeight = (int) (metrics.heightPixels * 0.8);
             getWindow().setLayout(screenWidth, screenHeight);
         }
 
