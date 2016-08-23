@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/action_up"
+    android:layout_width="?android:actionBarSize"
+    android:layout_height="?android:actionBarSize"
+    android:layout_marginBottom="@dimen/content_padding"
+    android:layout_marginEnd="@dimen/content_padding"
+    android:layout_marginRight="@dimen/content_padding"
+    android:background="@drawable/selector"
+    android:contentDescription="@string/up"
+    android:src="@drawable/ic_close_white_24dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>

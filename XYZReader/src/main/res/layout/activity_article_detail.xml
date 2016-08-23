@@ -14,16 +14,6 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent">
 
-        <ImageButton
-            android:id="@+id/action_up"
-            android:layout_width="?android:actionBarSize"
-            android:layout_height="?android:actionBarSize"
-            android:layout_marginBottom="@dimen/content_padding"
-            android:layout_marginEnd="@dimen/content_padding"
-            android:layout_marginRight="@dimen/content_padding"
-            android:background="@drawable/selector"
-            android:contentDescription="@string/up"
-            android:src="@drawable/ic_arrow_back"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        <include layout="@layout/back_button"/>
     </FrameLayout>
 </FrameLayout>
