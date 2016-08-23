@@ -17,15 +17,14 @@
                 android:layout_height="@dimen/toolbar_height"
                 android:background="@drawable/toolbar_texture"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:fitsSystemWindows="true"
-                app:layout_collapseMode="pin">
+                android:fitsSystemWindows="true">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center"
-                    android:layout_marginTop="@dimen/primary_title_padding_top"
-                    android:layout_marginBottom="@dimen/primary_title_padding_bottom"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/toolbar_logo_padding"
+                    android:layout_marginBottom="@dimen/toolbar_logo_padding"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/logo"/>
 
