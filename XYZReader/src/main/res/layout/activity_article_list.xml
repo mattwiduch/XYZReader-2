@@ -26,6 +26,7 @@
                     android:layout_marginTop="@dimen/toolbar_logo_padding"
                     android:layout_marginBottom="@dimen/toolbar_logo_padding"
                     android:contentDescription="@string/app_name"
+                    android:tint="@color/theme_accent"
                     android:src="@drawable/logo"/>
 
             </android.support.v7.widget.Toolbar>

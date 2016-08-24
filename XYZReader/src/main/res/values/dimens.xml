@@ -7,7 +7,7 @@
     <!-- Toolbar Properties -->
     <dimen name="toolbar_title_keyline">70dp</dimen>
     <dimen name="toolbar_height">80dp</dimen>
-    <dimen name="toolbar_logo_padding">8dp</dimen>
+    <dimen name="toolbar_logo_padding">12dp</dimen>
 
     <!-- FAB Properties -->
     <dimen name="fab_elevation">6dp</dimen>
