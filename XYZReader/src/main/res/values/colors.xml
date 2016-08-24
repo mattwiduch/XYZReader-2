@@ -16,12 +16,12 @@
 -->
 
 <resources>
-    <color name="theme_primary">#FD5621</color>
-    <color name="theme_primary_dark">#61CC451B</color>
+    <color name="theme_primary">#0B3349</color>
+    <color name="theme_primary_dark">#4d001021</color>
     <color name="theme_accent">#FD5621</color>
-    <color name="theme_background_light">#f5f5f5</color>
-    <color name="theme_background">#EEEEEE</color>
-    <color name="theme_background_dark">#BDBDBD</color>
+    <color name="theme_background_light">#F2F4F7</color>
+    <color name="theme_background">#DEE1E8</color>
+    <color name="theme_background_dark">#CBD2D8</color>
     <color name="theme_divider">#1e000000</color> <!-- 12% -->
 
     <!-- text colors -->
