@@ -1,6 +1,12 @@
 package com.example.xyzreader.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -30,5 +36,17 @@ public class DynamicHeightNetworkImageView extends NetworkImageView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int measuredWidth = getMeasuredWidth();
         setMeasuredDimension(measuredWidth, (int) (measuredWidth / mAspectRatio));
+    }
+
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+        TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{
+                new ColorDrawable(ContextCompat.getColor(getContext(), android.R.color.transparent)),
+                new BitmapDrawable(getContext().getResources(), bm)
+        });
+
+        setImageDrawable(transitionDrawable);
+        transitionDrawable.setCrossFadeEnabled(true);
+        transitionDrawable.startTransition(350);
     }
 }
