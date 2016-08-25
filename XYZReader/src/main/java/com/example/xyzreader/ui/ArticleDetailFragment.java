@@ -12,6 +12,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -54,6 +58,7 @@ public class ArticleDetailFragment extends Fragment implements
     private static final String TAG = "ArticleDetailFragment";
 
     public static final String ARG_ITEM_ID = "item_id";
+    private static final String DEFAULT_PHOTO = "default_photo";
 
     private Cursor mCursor;
     private long mItemId;
@@ -103,6 +108,7 @@ public class ArticleDetailFragment extends Fragment implements
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
+        mPhotoView.setTag(DEFAULT_PHOTO);
         mRootView.findViewById(R.id.app_bar_layout).setBackgroundColor(
                 ContextCompat.getColor(getActivity(), android.R.color.transparent));
         mColor = ContextCompat.getColor(getActivity(), R.color.theme_primary_dark);
@@ -277,7 +283,21 @@ public class ArticleDetailFragment extends Fragment implements
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
-                                mPhotoView.setImageBitmap(bitmap);
+                                if (mPhotoView.getTag() == DEFAULT_PHOTO) {
+                                    TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{
+                                            new ColorDrawable(ContextCompat.getColor(getActivity(),
+                                                    android.R.color.transparent)),
+                                            new BitmapDrawable(getActivity().getResources(), bitmap)
+                                    });
+
+                                    mPhotoView.setImageDrawable(transitionDrawable);
+                                    transitionDrawable.setCrossFadeEnabled(true);
+                                    transitionDrawable.startTransition(450);
+                                    mPhotoView.setTag(null);
+                                } else {
+                                    mPhotoView.setImageBitmap(bitmap);
+                                }
+
 
                                 final int imageSampleHeight = (int) TypedValue.applyDimension(
                                         TypedValue.COMPLEX_UNIT_DIP,
@@ -355,7 +375,7 @@ public class ArticleDetailFragment extends Fragment implements
                         window.setStatusBarColor((int) animation.getAnimatedValue());
                     }
                 });
-                statusBarColorAnim.setDuration(600L);
+                statusBarColorAnim.setDuration(450L);
                 statusBarColorAnim.setInterpolator(new AccelerateDecelerateInterpolator());
                 statusBarColorAnim.start();
             }
