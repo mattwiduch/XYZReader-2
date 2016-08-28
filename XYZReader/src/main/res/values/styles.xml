@@ -17,21 +17,24 @@
 
 <resources>
 
-    <style name="Theme.XYZ" parent="@style/Theme.AppCompat.Light.NoActionBar"/>
-
-    <style name="Theme.XYZ.List" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.XYZ.Master" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/theme_primary</item>
         <item name="colorPrimaryDark">@color/theme_primary_dark</item>
         <item name="colorAccent">@color/theme_accent</item>
     </style>
+    <style name="Theme.XYZ.Master.List" parent="@style/Theme.XYZ.Master"/>
 
-    <style name="Theme.XYZ.Detail" parent="@style/Theme.XYZ">
+    <style name="Theme.XYZ.Detail" parent="@style/Theme.AppCompat.Light.NoActionBar"/>
+    <style name="Theme.XYZ.Detail.Base" parent="@style/Theme.XYZ.Detail">
         <item name="colorPrimary">@color/theme_background</item>
         <item name="colorPrimaryDark">@color/theme_background_dark</item>
         <item name="colorAccent">@color/theme_accent</item>
         <item name="android:windowBackground">@color/text_primary_dark</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="Theme.XYZ.Detail.Article" parent="@style/Theme.XYZ.Detail.Base">
+
     </style>
 
     <style name="TextAppearance.Title" parent="TextAppearance.AppCompat.Headline">

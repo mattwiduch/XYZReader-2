@@ -1,10 +1,10 @@
 <resources>
 
-    <style name="Theme.XYZ" parent="@style/Theme.AppCompat.Light.Dialog">
+    <style name="Theme.XYZ.Detail" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.XYZ.Detail" parent="@style/Theme.XYZ">
+    <style name="Theme.XYZ.Detail.Article" parent="@style/Theme.XYZ.Detail.Base">
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 </resources>

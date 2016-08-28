@@ -12,5 +12,7 @@
     <string name="key_article_state">scrollPosition</string>
     <string name="error_loading_image">Couldn\'t load article image :(</string>
     <string name="share">Share</string>
+    <string name="a11y_article_photo">Article Photo</string>
+    <string name="transition_photo">article_photo_transition</string>
 
 </resources>

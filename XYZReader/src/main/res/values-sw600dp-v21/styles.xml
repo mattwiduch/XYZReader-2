@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.XYZ.Master.List" parent="@style/Theme.XYZ.Master">
+        <item name="android:windowExitTransition">@transition/no_transition</item>
+    </style>
+
+    <style name="Theme.XYZ.Detail.Article" parent="@style/Theme.XYZ.Detail.Base">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowEnterTransition">@transition/slide_bottom</item>
+        <item name="android:fragmentEnterTransition">@transition/slide_bottom</item>
+    </style>
+</resources>

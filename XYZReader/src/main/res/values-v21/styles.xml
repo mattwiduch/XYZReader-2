@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.XYZ.Master.List" parent="@style/Theme.XYZ.Master">
+        <item name="android:windowExitTransition">@transition/explode</item>
+    </style>
+
+    <style name="Theme.XYZ.Detail.Article" parent="@style/Theme.XYZ.Detail.Base">
+        <item name="android:windowEnterTransition">@transition/fade</item>
+    </style>
+</resources>
