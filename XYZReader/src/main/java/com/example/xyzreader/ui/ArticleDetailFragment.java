@@ -24,6 +24,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
 import android.text.Html;
@@ -37,7 +38,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -286,13 +286,14 @@ public class ArticleDetailFragment extends Fragment implements
                                 if (mPhotoView.getTag() == DEFAULT_PHOTO) {
                                     TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{
                                             new ColorDrawable(ContextCompat.getColor(getActivity(),
-                                                    android.R.color.transparent)),
+                                                    R.color.theme_background)),
                                             new BitmapDrawable(getActivity().getResources(), bitmap)
                                     });
 
                                     mPhotoView.setImageDrawable(transitionDrawable);
                                     transitionDrawable.setCrossFadeEnabled(true);
-                                    transitionDrawable.startTransition(450);
+                                    transitionDrawable.startTransition(getResources().getInteger(
+                                            R.integer.image_fade_in_duration));
                                     mPhotoView.setTag(null);
                                 } else {
                                     mPhotoView.setImageBitmap(bitmap);
@@ -375,8 +376,9 @@ public class ArticleDetailFragment extends Fragment implements
                         window.setStatusBarColor((int) animation.getAnimatedValue());
                     }
                 });
-                statusBarColorAnim.setDuration(450L);
-                statusBarColorAnim.setInterpolator(new AccelerateDecelerateInterpolator());
+                statusBarColorAnim.setDuration(getResources().getInteger(
+                        R.integer.colour_fade_in_duration));
+                statusBarColorAnim.setInterpolator(new LinearOutSlowInInterpolator());
                 statusBarColorAnim.start();
             }
         }

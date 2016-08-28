@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="list_column_count">1</integer>
+    <integer name="image_fade_in_duration">375</integer>
+    <integer name="colour_fade_in_duration">225</integer>
 </resources>

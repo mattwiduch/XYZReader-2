@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.example.xyzreader.R;
 
 public class DynamicHeightNetworkImageView extends NetworkImageView {
     private float mAspectRatio = 1.5f;
@@ -41,12 +42,13 @@ public class DynamicHeightNetworkImageView extends NetworkImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{
-                new ColorDrawable(ContextCompat.getColor(getContext(), android.R.color.transparent)),
+                new ColorDrawable(ContextCompat.getColor(getContext(), R.color.theme_background)),
                 new BitmapDrawable(getContext().getResources(), bm)
         });
 
         setImageDrawable(transitionDrawable);
         transitionDrawable.setCrossFadeEnabled(true);
-        transitionDrawable.startTransition(350);
+        transitionDrawable.startTransition(getResources().getInteger(
+                R.integer.image_fade_in_duration));
     }
 }
