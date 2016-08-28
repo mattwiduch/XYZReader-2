@@ -29,7 +29,7 @@
         <item name="colorPrimary">@color/theme_background</item>
         <item name="colorPrimaryDark">@color/theme_background_dark</item>
         <item name="colorAccent">@color/theme_accent</item>
-        <item name="android:windowBackground">@color/text_tertiary_dark</item>
+        <item name="android:windowBackground">@color/text_primary_dark</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
