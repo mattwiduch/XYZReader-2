@@ -3,4 +3,8 @@
     <style name="Theme.XYZ" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="Theme.XYZ.Detail" parent="@style/Theme.XYZ">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>
