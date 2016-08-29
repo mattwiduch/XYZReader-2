@@ -14,5 +14,11 @@
     <string name="share">Share</string>
     <string name="a11y_article_photo">Article Photo</string>
     <string name="transition_photo">article_photo_transition</string>
+    <string name="key_article_photo">article_photo</string>
+    <string name="transition_title">title_transition</string>
+    <string name="transition_share">transition_share</string>
+    <string name="state_current_position">state_current_position</string>
+    <string name="key_current_position">key_current_position</string>
+    <string name="key_starting_position">key_starting_position</string>
 
 </resources>

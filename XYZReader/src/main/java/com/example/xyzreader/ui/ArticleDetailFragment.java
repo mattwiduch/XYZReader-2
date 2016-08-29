@@ -32,7 +32,6 @@ import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +85,6 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
@@ -299,15 +297,15 @@ public class ArticleDetailFragment extends Fragment implements
                                     mPhotoView.setImageBitmap(bitmap);
                                 }
 
-
-                                final int imageSampleHeight = (int) TypedValue.applyDimension(
-                                        TypedValue.COMPLEX_UNIT_DIP,
-                                        36,
-                                        getActivity().getResources().getDisplayMetrics());
+                                // TODO: Fix crash
+//                                final int imageSampleHeight = (int) TypedValue.applyDimension(
+//                                        TypedValue.COMPLEX_UNIT_DIP,
+//                                        36,
+//                                        getActivity().getResources().getDisplayMetrics());
 
                                 Palette p = Palette.from(bitmap)
                                         .maximumColorCount(5)
-                                        .setRegion(0, 0, bitmap.getWidth() - 1, imageSampleHeight)
+                                        .setRegion(0, 0, bitmap.getWidth() - 1, 48)//imageSampleHeight)
                                         .generate();
 
                                 mColor = p.getDarkVibrantColor(p.getDarkMutedColor(p.getVibrantColor(
@@ -322,28 +320,28 @@ public class ArticleDetailFragment extends Fragment implements
 
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                                Bitmap logo = BitmapFactory.decodeResource(getActivity().getResources(),
-                                        R.drawable.empty_detail);
-                                mColor = ContextCompat.getColor(getActivity(),
-                                        R.color.theme_background_dark);
+                            Bitmap logo = BitmapFactory.decodeResource(getActivity().getResources(),
+                                    R.drawable.empty_detail);
+                            mColor = ContextCompat.getColor(getActivity(),
+                                    R.color.theme_background_dark);
 
-                                // Combine logo and background color in new bitmap
-                                // and show it as article picture
-                                Bitmap errorImage = Bitmap.createBitmap(logo.getWidth(),
-                                        logo.getHeight(), logo.getConfig());
-                                Canvas canvas = new Canvas(errorImage);
-                                canvas.drawColor(ContextCompat.getColor(getActivity(),
-                                        R.color.theme_background));
-                                canvas.drawBitmap(logo, 0, 0, null);
-                                mPhotoView.setImageBitmap(errorImage);
+                            // Combine logo and background color in new bitmap
+                            // and show it as article picture
+                            Bitmap errorImage = Bitmap.createBitmap(logo.getWidth(),
+                                    logo.getHeight(), logo.getConfig());
+                            Canvas canvas = new Canvas(errorImage);
+                            canvas.drawColor(ContextCompat.getColor(getActivity(),
+                                    R.color.theme_background));
+                            canvas.drawBitmap(logo, 0, 0, null);
+                            mPhotoView.setImageBitmap(errorImage);
 
-                                if (getUserVisibleHint()) {
-                                    applyColors();
-                                    // Show Toast with error message
-                                    Toast.makeText(getActivity(), R.string.error_loading_image,
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                            if (getUserVisibleHint()) {
+                                applyColors();
+                                // Show Toast with error message
+                                Toast.makeText(getActivity(), R.string.error_loading_image,
+                                        Toast.LENGTH_SHORT).show();
                             }
+                        }
                     });
         } else {
             mRootView.setVisibility(View.GONE);
@@ -420,6 +418,17 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         bindViews();
+        mPhotoView.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        mPhotoView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            getActivity().startPostponedEnterTransition();
+                        }
+                        return true;
+                    }
+                });
     }
 
     @Override
@@ -434,5 +443,9 @@ public class ArticleDetailFragment extends Fragment implements
         if (isVisible() && isResumed()) {
             applyColors();
         }
+    }
+
+    public ImageView getPhotoView() {
+        return mPhotoView;
     }
 }

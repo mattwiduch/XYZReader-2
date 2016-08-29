@@ -1,24 +1,34 @@
 package com.example.xyzreader.ui;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v13.app.ActivityCompat;
 import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.SharedElementCallback;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
+
+import java.util.List;
+import java.util.Map;
 
 import static com.example.xyzreader.R.id.pager;
 
@@ -39,15 +49,58 @@ public class ArticleDetailActivity extends AppCompatActivity
     private View mUpButtonContainer;
     private View mUpButton;
 
+    private ArticleDetailFragment mCurrentArticleFragment;
+    private int mCurrentPosition;
+    private int mStartingPosition;
+    private boolean mIsReturning;
+
+    private final SharedElementCallback mSharedElementCallback = new SharedElementCallback() {
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+            if (mIsReturning) {
+                // TODO: Add all shared elements
+                ImageView sharedPhoto = mCurrentArticleFragment.getPhotoView();
+
+                Log.d("TAG", "onviMapSharedElements: " + sharedPhoto.getTransitionName());
+                if (sharedPhoto == null) {
+                    // If shared element is null, then it has been scrolled off screen and
+                    // no longer visible. In this case we cancel the shared element transition by
+                    // removing the shared element from the shared elements map.
+                    names.clear();
+                    sharedElements.clear();
+                } else if (mStartingPosition != mCurrentPosition) {
+                    // If the user has swiped to a different ViewPager page, then we need to
+                    // remove the old shared element and replace it with the new shared element
+                    // that should be transitioned instead.
+                    names.clear();
+                    names.add(sharedPhoto.getTransitionName());
+                    sharedElements.clear();
+                    sharedElements.put(sharedPhoto.getTransitionName(), sharedPhoto);
+                }
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_article_detail);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            ActivityCompat.postponeEnterTransition(this);
+            ActivityCompat.setEnterSharedElementCallback(this, mSharedElementCallback);
         }
-        setContentView(R.layout.activity_article_detail);
+
+
+        mStartingPosition = getIntent().getIntExtra(getString(R.string.key_starting_position), 0);
+        if (savedInstanceState == null) {
+            mCurrentPosition = mStartingPosition;
+        } else {
+            mCurrentPosition = savedInstanceState.getInt(getString(R.string.state_current_position));
+        }
 
         // If activity is displayed in a dialog, adjust its width & height
         if (getWindow().isFloating()) {
@@ -92,6 +145,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         mUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // TODO: Implement correct behaviour
                 onSupportNavigateUp();
             }
         });
@@ -122,6 +176,10 @@ public class ArticleDetailActivity extends AppCompatActivity
                 if (mCursor.getLong(ArticleLoader.Query._ID) == mStartId) {
                     final int position = mCursor.getPosition();
                     mPager.setCurrentItem(position, false);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        mCurrentArticleFragment.getPhotoView().setTransitionName(
+                                getString(R.string.transition_photo));
+                    }
                     break;
                 }
                 mCursor.moveToNext();
@@ -136,6 +194,22 @@ public class ArticleDetailActivity extends AppCompatActivity
         mPagerAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(getString(R.string.state_current_position), mCurrentPosition);
+    }
+
+    @Override
+    public void finishAfterTransition() {
+        mIsReturning = true;
+        Intent data = new Intent();
+        data.putExtra(getString(R.string.key_starting_position), mStartingPosition);
+        data.putExtra(getString(R.string.key_current_position), mCurrentPosition);
+        setResult(RESULT_OK, data);
+        super.finishAfterTransition();
+    }
+
     private class MyPagerAdapter extends FragmentStatePagerAdapter {
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -144,6 +218,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
+            mCurrentArticleFragment = (ArticleDetailFragment) object;
         }
 
         @Override
