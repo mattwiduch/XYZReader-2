@@ -7,7 +7,7 @@
 
     <style name="Theme.XYZ.Detail.Article" parent="@style/Theme.XYZ.Detail.Base">
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowEnterTransition">@transition/slide_bottom</item>
-        <item name="android:fragmentEnterTransition">@transition/slide_bottom</item>
+        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:fragmentEnterTransition">@transition/fade</item>
     </style>
 </resources>
