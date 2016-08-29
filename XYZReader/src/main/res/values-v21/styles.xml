@@ -2,10 +2,20 @@
 <resources>
 
     <style name="Theme.XYZ.Master.List" parent="@style/Theme.XYZ.Master">
-        <item name="android:windowExitTransition">@transition/explode</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowExitTransition">@transition/fade</item>
+        <item name="android:windowReenterTransition">@transition/slide_top</item>
     </style>
 
     <style name="Theme.XYZ.Detail.Article" parent="@style/Theme.XYZ.Detail.Base">
-        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowEnterTransition">@transition/explode</item>
+        <item name="android:windowExitTransition">@transition/slide_bottom</item>
     </style>
 </resources>

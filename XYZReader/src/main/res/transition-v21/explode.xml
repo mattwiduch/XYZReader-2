@@ -10,4 +10,5 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<explode xmlns:android="http://schemas.android.com/apk/res/android"/>
+<explode xmlns:android="http://schemas.android.com/apk/res/android"
+         android:duration="@integer/image_fade_in_duration"/>
