@@ -1,6 +1,5 @@
 package com.example.xyzreader.ui;
 
-import android.app.ActivityOptions;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,8 +10,11 @@ import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v13.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
@@ -40,6 +42,7 @@ public class ArticleListActivity extends AppCompatActivity implements
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private BroadcastReceiver mRefreshingReceiver;
+    private Toolbar mToolbar;
     private boolean mIsRefreshing = false;
 
     @Override
@@ -48,8 +51,9 @@ public class ArticleListActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_article_list);
 
         // Blends Toolbar's background texture with app's primary colour
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.theme_primary), PorterDuff.Mode.MULTIPLY);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.theme_primary),
+                PorterDuff.Mode.MULTIPLY);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -132,15 +136,35 @@ public class ArticleListActivity extends AppCompatActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(
+                            getItemId(vh.getAdapterPosition())));
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        startActivity(new Intent(Intent.ACTION_VIEW,
-                                ItemsContract.Items.buildItemUri(getItemId(
-                                        vh.getAdapterPosition()))), ActivityOptions.
-                                makeSceneTransitionAnimation(ArticleListActivity.this, vh.thumbnailView,
-                                        vh.thumbnailView.getTransitionName()).toBundle());
+                        View navigationBar = findViewById(android.R.id.navigationBarBackground);
+                        View statusBar = findViewById(android.R.id.statusBarBackground);
+
+                        Pair<View, String> photoPair = Pair.create(view,
+                                getString(R.string.transition_photo));
+                        Pair<View, String> titlePair = Pair.create((View) vh.titleView,
+                                getString(R.string.transition_title));
+                        Pair<View, String> sharePair = Pair.create((View) vh.shareButton,
+                                getString(R.string.transition_share));
+                        Pair<View, String> statusBarPair = Pair.create(statusBar,
+                                statusBar.getTransitionName());
+                        Pair<View, String> toolbarPair = Pair.create((View) mToolbar,
+                                statusBar.getTransitionName());
+                        Pair<View, String> navBarPair = Pair.create(navigationBar,
+                                navigationBar.getTransitionName());
+
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                ArticleListActivity.this, photoPair, titlePair, sharePair,
+                                statusBarPair, toolbarPair, navBarPair);
+
+                        intent.putExtra(getString(R.string.key_starting_position), vh.getAdapterPosition());
+
+                        ActivityCompat.startActivity(ArticleListActivity.this, intent, options.toBundle());
                     } else {
-                        startActivity(new Intent(Intent.ACTION_VIEW,
-                                ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
+                        startActivity(intent);
                     }
 
                 }

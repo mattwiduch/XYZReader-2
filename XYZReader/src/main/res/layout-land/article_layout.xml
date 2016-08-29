@@ -4,7 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/article_photo"/>
+    <ImageView
+        android:id="@+id/article_photo"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/theme_background"
+        android:contentDescription="@string/a11y_article_photo"
+        android:scaleType="centerCrop"/>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"

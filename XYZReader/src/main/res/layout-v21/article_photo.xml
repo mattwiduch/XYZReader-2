@@ -1,9 +1,0 @@
-<com.example.xyzreader.ui.SquareImageView
-    android:id="@+id/article_photo"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:background="@color/theme_background"
-    android:scaleType="centerCrop"
-    android:src="@drawable/empty_detail"
-    android:transitionName="@string/transition_photo"/>

@@ -7,7 +7,13 @@
     android:focusable="true"
     android:foreground="@drawable/selector">
 
-    <include layout="@layout/card_photo"/>
+    <!--suppress AndroidLintContentDescription -->
+    <com.example.xyzreader.ui.DynamicHeightNetworkImageView
+        android:id="@+id/thumbnail"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_background"/>
 
     <View
         android:layout_width="match_parent"
