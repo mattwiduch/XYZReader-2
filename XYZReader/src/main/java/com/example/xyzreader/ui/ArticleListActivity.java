@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
@@ -138,6 +142,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(
                             getItemId(vh.getAdapterPosition())));
+                    intent.putExtra(getString(R.string.key_article_photo), vh.lowResolutionImage);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         View navigationBar = findViewById(android.R.id.navigationBarBackground);
@@ -173,8 +178,9 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(ViewHolder viewHolder, int position) {
             mCursor.moveToPosition(position);
+            final ViewHolder holder = viewHolder;
             holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
             holder.thumbnailView.setDefaultImageResId(R.drawable.empty_detail);
             holder.thumbnailView.setErrorImageResId(R.drawable.empty_detail);
@@ -182,6 +188,21 @@ public class ArticleListActivity extends AppCompatActivity implements
                     mCursor.getString(ArticleLoader.Query.PHOTO_URL),
                     ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
             holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+
+            ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader()
+                    .get(mCursor.getString(ArticleLoader.Query.THUMB_URL), new ImageLoader.ImageListener() {
+                        @Override
+                        public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                            holder.lowResolutionImage = response.getBitmap();
+                        }
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            holder.lowResolutionImage = BitmapFactory.decodeResource(getResources(),
+                                    R.drawable.empty_detail);
+                        }
+                    });
+
             holder.shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -203,6 +224,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         DynamicHeightNetworkImageView thumbnailView;
         TextView titleView;
         AppCompatImageButton shareButton;
+        Bitmap lowResolutionImage;
 
         ViewHolder(View view) {
             super(view);

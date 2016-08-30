@@ -14,7 +14,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
@@ -68,6 +67,8 @@ public class ArticleDetailFragment extends Fragment implements
     private CollapsingToolbarLayout mToolbarLayout;
 
     private int mColor;
+    private Bitmap mFullResolutionBitmap;
+    private Bitmap mLowResolutionBitmap;
 
     public ArticleDetailFragment() {
         /**
@@ -108,6 +109,9 @@ public class ArticleDetailFragment extends Fragment implements
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
+        mLowResolutionBitmap = getActivity().getIntent().getParcelableExtra(getString(R.string.key_article_photo));
+        Bitmap initialBitmap = mFullResolutionBitmap != null ? mFullResolutionBitmap : mLowResolutionBitmap;
+        mPhotoView.setImageBitmap(initialBitmap);
         mPhotoView.setTag(DEFAULT_PHOTO);
         mRootView.findViewById(R.id.app_bar_layout).setBackgroundColor(
                 ContextCompat.getColor(getActivity(), android.R.color.transparent));
@@ -196,7 +200,6 @@ public class ArticleDetailFragment extends Fragment implements
             }
         });
 
-        bindViews();
         return mRootView;
     }
 
@@ -293,14 +296,15 @@ public class ArticleDetailFragment extends Fragment implements
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
+                                mFullResolutionBitmap = bitmap;
+
                                 if (mPhotoView.getTag() == DEFAULT_PHOTO) {
                                     TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{
-                                            new ColorDrawable(backgroundColour),
+                                            mPhotoView.getDrawable(),
                                             new BitmapDrawable(resources, bitmap)
                                     });
 
                                     mPhotoView.setImageDrawable(transitionDrawable);
-                                    transitionDrawable.setCrossFadeEnabled(true);
                                     transitionDrawable.startTransition(resources.getInteger(
                                             R.integer.image_fade_in_duration));
                                     mPhotoView.setTag(null);
