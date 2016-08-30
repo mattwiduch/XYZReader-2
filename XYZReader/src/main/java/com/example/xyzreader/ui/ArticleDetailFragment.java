@@ -22,6 +22,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v13.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
@@ -108,6 +109,19 @@ public class ArticleDetailFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
+        mRootView.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        mRootView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                && ArticleDetailFragment.this.isVisible()) {
+                            ActivityCompat.startPostponedEnterTransition(getActivity());
+                        }
+                        return true;
+                    }
+                });
+
         mPhotoView = (ImageView) mRootView.findViewById(R.id.article_photo);
         mLowResolutionBitmap = getActivity().getIntent().getParcelableExtra(getString(R.string.key_article_photo));
         Bitmap initialBitmap = mFullResolutionBitmap != null ? mFullResolutionBitmap : mLowResolutionBitmap;
@@ -425,17 +439,6 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         bindViews();
-        mPhotoView.getViewTreeObserver().addOnPreDrawListener(
-                new ViewTreeObserver.OnPreDrawListener() {
-                    @Override
-                    public boolean onPreDraw() {
-                        mPhotoView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            getActivity().startPostponedEnterTransition();
-                        }
-                        return true;
-                    }
-                });
     }
 
     @Override
