@@ -7,6 +7,7 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,7 @@ import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +112,7 @@ public class ArticleDetailFragment extends Fragment implements
         mRootView.findViewById(R.id.app_bar_layout).setBackgroundColor(
                 ContextCompat.getColor(getActivity(), android.R.color.transparent));
         mColor = ContextCompat.getColor(getActivity(), R.color.theme_primary_dark);
+        mToolbarLayout = (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar_layout);
 
         final NestedScrollView scrollView = (NestedScrollView) mRootView.findViewById(R.id.scroll_view);
         final Bundle state = savedInstanceState;
@@ -224,7 +227,6 @@ public class ArticleDetailFragment extends Fragment implements
             return;
         }
 
-        mToolbarLayout = (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar_layout);
         final TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
         TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
         bylineView.setMovementMethod(new LinkMovementMethod());
@@ -275,6 +277,16 @@ public class ArticleDetailFragment extends Fragment implements
                 }
             });
 
+            final int backgroundColour = ContextCompat.getColor(getActivity(),
+                    R.color.theme_background);
+            final int darkBackgroundColour = ContextCompat.getColor(getActivity(),
+                    R.color.theme_background_dark);
+            final Resources resources = getActivity().getResources();
+            final int imageSampleHeight = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    36,
+                    getActivity().getResources().getDisplayMetrics());
+
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
@@ -283,29 +295,22 @@ public class ArticleDetailFragment extends Fragment implements
                             if (bitmap != null) {
                                 if (mPhotoView.getTag() == DEFAULT_PHOTO) {
                                     TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{
-                                            new ColorDrawable(ContextCompat.getColor(getActivity(),
-                                                    R.color.theme_background)),
-                                            new BitmapDrawable(getActivity().getResources(), bitmap)
+                                            new ColorDrawable(backgroundColour),
+                                            new BitmapDrawable(resources, bitmap)
                                     });
 
                                     mPhotoView.setImageDrawable(transitionDrawable);
                                     transitionDrawable.setCrossFadeEnabled(true);
-                                    transitionDrawable.startTransition(getResources().getInteger(
+                                    transitionDrawable.startTransition(resources.getInteger(
                                             R.integer.image_fade_in_duration));
                                     mPhotoView.setTag(null);
                                 } else {
                                     mPhotoView.setImageBitmap(bitmap);
                                 }
 
-                                // TODO: Fix crash
-//                                final int imageSampleHeight = (int) TypedValue.applyDimension(
-//                                        TypedValue.COMPLEX_UNIT_DIP,
-//                                        36,
-//                                        getActivity().getResources().getDisplayMetrics());
-
                                 Palette p = Palette.from(bitmap)
                                         .maximumColorCount(5)
-                                        .setRegion(0, 0, bitmap.getWidth() - 1, 48)//imageSampleHeight)
+                                        .setRegion(0, 0, bitmap.getWidth() - 1, imageSampleHeight)
                                         .generate();
 
                                 mColor = p.getDarkVibrantColor(p.getDarkMutedColor(p.getVibrantColor(
@@ -320,18 +325,16 @@ public class ArticleDetailFragment extends Fragment implements
 
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            Bitmap logo = BitmapFactory.decodeResource(getActivity().getResources(),
+                            Bitmap logo = BitmapFactory.decodeResource(resources,
                                     R.drawable.empty_detail);
-                            mColor = ContextCompat.getColor(getActivity(),
-                                    R.color.theme_background_dark);
+                            mColor = darkBackgroundColour;
 
                             // Combine logo and background color in new bitmap
                             // and show it as article picture
                             Bitmap errorImage = Bitmap.createBitmap(logo.getWidth(),
                                     logo.getHeight(), logo.getConfig());
                             Canvas canvas = new Canvas(errorImage);
-                            canvas.drawColor(ContextCompat.getColor(getActivity(),
-                                    R.color.theme_background));
+                            canvas.drawColor(backgroundColour);
                             canvas.drawBitmap(logo, 0, 0, null);
                             mPhotoView.setImageBitmap(errorImage);
 
