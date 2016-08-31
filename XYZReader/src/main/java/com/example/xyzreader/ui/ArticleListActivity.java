@@ -60,6 +60,12 @@ public class ArticleListActivity extends AppCompatActivity implements
                 PorterDuff.Mode.MULTIPLY);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRefreshingReceiver = new BroadcastReceiver() {
             @Override
@@ -113,6 +119,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
