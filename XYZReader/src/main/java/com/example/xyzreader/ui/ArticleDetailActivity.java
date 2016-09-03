@@ -17,7 +17,6 @@ import android.support.v4.app.SharedElementCallback;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +60,6 @@ public class ArticleDetailActivity extends AppCompatActivity
             if (mIsReturning) {
                 // TODO: Add all shared elements
                 ImageView sharedPhoto = mCurrentArticleFragment.getPhotoView();
-
-                Log.d("TAG", "onviMapSharedElements: " + sharedPhoto.getTransitionName());
                 if (sharedPhoto == null) {
                     // If shared element is null, then it has been scrolled off screen and
                     // no longer visible. In this case we cancel the shared element transition by
