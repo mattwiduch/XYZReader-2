@@ -21,7 +21,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 /**
- * Square ImageView.
+ * Square shaped ImageView.
  */
 
 public class SquareImageView extends ImageView {
@@ -39,8 +39,8 @@ public class SquareImageView extends ImageView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int sixteenNineHeight = MeasureSpec.getSize(widthMeasureSpec);
-        int sixteenNineHeightSpec = MeasureSpec.makeMeasureSpec(sixteenNineHeight, MeasureSpec.EXACTLY);
-        super.onMeasure(widthMeasureSpec, sixteenNineHeightSpec);
+        int squareHeight = MeasureSpec.getSize(widthMeasureSpec);
+        int squareHeightSpec = MeasureSpec.makeMeasureSpec(squareHeight, MeasureSpec.EXACTLY);
+        super.onMeasure(widthMeasureSpec, squareHeightSpec);
     }
 }
