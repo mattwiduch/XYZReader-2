@@ -168,6 +168,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                         Pair<View, String> navBarPair = Pair.create(navigationBar,
                                 navigationBar.getTransitionName());
 
+                        @SuppressWarnings("unchecked")
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                                 ArticleListActivity.this, photoPair, titlePair, sharePair,
                                 statusBarPair, toolbarPair, navBarPair);
