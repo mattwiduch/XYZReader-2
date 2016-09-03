@@ -8,6 +8,6 @@
     android:layout_marginEnd="@dimen/content_padding"
     android:layout_marginRight="@dimen/content_padding"
     android:background="@drawable/selector"
-    android:contentDescription="@string/up"
+    android:contentDescription="@string/a11y_action_up"
     android:src="@drawable/ic_arrow_back"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>

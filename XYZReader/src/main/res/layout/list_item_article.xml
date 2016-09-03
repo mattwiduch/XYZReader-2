@@ -48,7 +48,7 @@
             android:layout_marginLeft="@dimen/content_padding"
             android:layout_marginStart="@dimen/content_padding"
             android:background="@drawable/selector"
-            android:contentDescription="@string/share"
+            android:contentDescription="@string/a11y_share"
             android:src="@drawable/ic_share_shadow"/>
 
     </FrameLayout>

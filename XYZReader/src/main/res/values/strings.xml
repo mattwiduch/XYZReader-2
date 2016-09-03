@@ -1,21 +1,29 @@
 <resources>
-
+    <!-- General -->
     <string name="app_name">XYZ Reader</string>
 
-    <string name="action_share">Share</string>
-
-    <string name="up">Up</string>
-    <string name="share_sample_text">Some sample text</string>
-    <string name="key_article_state">scrollPosition</string>
+    <!-- Error messages -->
     <string name="error_loading_image">Couldn\'t load article image :(</string>
-    <string name="share">Share</string>
-    <string name="a11y_article_photo">Article Photo</string>
-    <string name="transition_photo">article_photo_transition</string>
-    <string name="key_article_photo">article_photo</string>
-    <string name="transition_title">title_transition</string>
-    <string name="transition_share">transition_share</string>
+
+    <!-- Strings related to article sharing -->
+    <string name="action_share">Share</string>
+    <string name="share_sample_text">Some sample text</string>
+
+    <!-- Keys -->
     <string name="state_current_position">state_current_position</string>
+    <string name="key_article_state">scrollPosition</string>
+    <string name="key_article_photo">article_photo</string>
     <string name="key_current_position">key_current_position</string>
     <string name="key_starting_position">key_starting_position</string>
+
+    <!-- Transition names -->
+    <string name="transition_title">transition_title</string>
+    <string name="transition_share">transition_share</string>
+    <string name="transition_photo">transition_photo</string>
+
+    <!-- A11y -->
+    <string name="a11y_action_up">Navigate up</string>
+    <string name="a11y_article_photo">Article photo</string>
+    <string name="a11y_share">Share article</string>
 
 </resources>
