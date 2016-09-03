@@ -28,6 +28,10 @@ import android.util.AttributeSet;
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.xyzreader.R;
 
+/**
+ * NetworkImageView with dynamic height and fade in animation.
+ */
+
 public class DynamicHeightNetworkImageView extends NetworkImageView {
     private float mAspectRatio = 1.5f;
 
