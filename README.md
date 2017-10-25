@@ -3,7 +3,7 @@
 <img src="https://cloud.githubusercontent.com/assets/15446842/18227186/f5353726-7213-11e6-8da7-ad971cf4249f.png"/>
 
 XYZReader 2 is news reader application for Android tablets and smartphones running Android 4.1 (API level 16) or newer. It demonstrates use of [Material
-Design] (https://material.google.com/) principles to create engaging user interface.
+Design](https://material.google.com/) principles to create engaging user interface.
 
 **New Features:**
 
@@ -15,8 +15,8 @@ Design] (https://material.google.com/) principles to create engaging user interf
 
 ## Dependencies
 XYZReader 2 uses following third-party libraries:
-- [Volley] (https://android.googlesource.com/platform/frameworks/volley/)
-- [OkHttp] (http://square.github.io/okhttp/)
+- [Volley](https://android.googlesource.com/platform/frameworks/volley/)
+- [OkHttp](http://square.github.io/okhttp/)
 
 ## Try it out
 Try XYZReader 2 by following these steps:
