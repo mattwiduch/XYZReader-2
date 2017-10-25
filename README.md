@@ -7,11 +7,15 @@ Design](https://material.google.com/) principles to create engaging user interfa
 
 **New Features:**
 
+- Brand new article list layout optimised for tablets and landscape mode
 - Brand new layout for detail activity featuring collapsing toolbar
-- Brand new article list item layout 
-- Window transitions 
-- Shared element transitions
-- And many more other improvements
+- Shared element transitions between list and article screens
+- Status bar changes color to match article image
+- Custom PageTransformer for article ViewPager
+- Full bleed images with fade-in animations
+- Vertical swipe refresh for list
+- New, enhanced colour theme
+- And many more
 
 ## Try it out
 To install the app on a connected device or running emulator, run:
