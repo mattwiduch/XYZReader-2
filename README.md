@@ -13,17 +13,19 @@ Design](https://material.google.com/) principles to create engaging user interfa
 - Shared element transitions
 - And many more other improvements
 
+## Try it out
+To install the app on a connected device or running emulator, run:
+
+```gradle
+git clone https://github.com/mattwiduch/XYZReader2.git
+cd XYZReader2
+./gradlew installDebug
+```
+
 ## Dependencies
 XYZReader 2 uses following third-party libraries:
 - [Volley](https://android.googlesource.com/platform/frameworks/volley/)
 - [OkHttp](http://square.github.io/okhttp/)
-
-## Try it out
-Try XYZReader 2 by following these steps:
-
-1. Download repo
-2. Run `./gradlew clean build` in root directory
-3. Enjoy!
 
 ## License
 ```
